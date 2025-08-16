@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrowserProxy - Online Browser Testing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-globe"></i>
+                    BrowserProxy
+                </h1>
+                <p class="tagline">Online cross-browser testing made simple</p>
+            </div>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="browser-selector">
+                <label for="browser-select">Browser:</label>
+                <select id="browser-select">
+                    <option value="chrome">Chrome (Latest)</option>
+                    <option value="firefox">Firefox (Latest)</option>
+                    <option value="safari">Safari (Latest)</option>
+                </select>
+            </div>
+
+            <div class="url-input-container">
+                <label for="url-input">Website URL:</label>
+                <div class="url-input-wrapper">
+                    <input type="text" id="url-input" placeholder="Enter website URL (e.g., google.com)" value="google.com">
+                    <button id="navigate-btn" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i>
+                        Go
+                    </button>
+                </div>
+            </div>
+
+            <div class="session-controls">
+                <button id="new-session-btn" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i>
+                    New Session
+                </button>
+                <button id="end-session-btn" class="btn btn-danger" disabled>
+                    <i class="fas fa-times"></i>
+                    End Session
+                </button>
+            </div>
+
+            <div class="session-info">
+                <span id="session-status" class="status-indicator">No active session</span>
+                <span id="current-url" class="current-url"></span>
+            </div>
+        </div>
+
+        <!-- Browser Viewport -->
+        <div class="browser-container">
+            <div class="browser-toolbar">
+                <div class="browser-controls">
+                    <button id="back-btn" class="toolbar-btn" disabled>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button id="forward-btn" class="toolbar-btn" disabled>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button id="refresh-btn" class="toolbar-btn" disabled>
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                <div class="address-bar">
+                    <span id="address-display">No page loaded</span>
+                </div>
+                <div class="browser-info">
+                    <span id="browser-type">Chrome</span>
+                    <span class="resolution">1024x768</span>
+                </div>
+            </div>
+
+            <div class="viewport-container">
+                <div id="loading-overlay" class="loading-overlay">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Starting browser session...</p>
+                    </div>
+                </div>
+
+                <div id="browser-viewport" class="browser-viewport">
+                    <div class="no-session-message">
+                        <i class="fas fa-browser"></i>
+                        <h3>No Active Browser Session</h3>
+                        <p>Click "New Session" to start browsing</p>
+                    </div>
+                </div>
+
+                <canvas id="browser-canvas" class="browser-canvas" width="1024" height="768" style="display: none;"></canvas>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="connection-status" class="connection-status">
+                    <i class="fas fa-circle"></i>
+                    Disconnected
+                </span>
+            </div>
+            <div class="status-right">
+                <span class="performance-info">
+                    Latency: <span id="latency">--</span>ms
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
