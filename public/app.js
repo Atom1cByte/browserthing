@@ -19,6 +19,7 @@ class BrowserProxyClient {
         this.navigateBtn = document.getElementById('navigate-btn');
         this.newSessionBtn = document.getElementById('new-session-btn');
         this.endSessionBtn = document.getElementById('end-session-btn');
+        this.logoutBtn = document.getElementById('logout-btn');
         
         // browser navigation buttons because we're basically building Chrome but worse
         this.backBtn = document.getElementById('back-btn');
@@ -46,6 +47,7 @@ class BrowserProxyClient {
         this.endSessionBtn.addEventListener('click', () => this.endSession());
         this.navigateBtn.addEventListener('click', () => this.navigate());
         this.refreshBtn.addEventListener('click', () => this.refresh());
+        this.logoutBtn.addEventListener('click', () => this.logout());
         
         // URL input events because Enter key supremacy
         this.urlInput.addEventListener('keypress', (e) => {
@@ -295,6 +297,29 @@ class BrowserProxyClient {
 
     showError(message) {
         alert('Error: ' + message);
+    }
+
+    async logout() {
+        try {
+            await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // end current session if any
+            if (this.currentSessionId) {
+                await this.endSession();
+            }
+
+            // redirect to login page
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Logout error:', error);
+            // force redirect anyway
+            window.location.href = '/';
+        }
     }
 }
 

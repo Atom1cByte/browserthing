@@ -10,7 +10,8 @@ A web-based browser proxy service that allows users to access websites through a
 - **Multiple Browser Support**: Chrome, Firefox, and Safari options (currently Chrome implemented)
 - **Proxy Functionality**: Built-in proxy to handle cross-origin requests
 - **Session Management**: Create, manage, and destroy browser sessions
-- **Security**: Rate limiting, CORS protection, and session isolation
+- **Passcode Authentication**: Secure access with configurable passcode protection
+- **Security**: Rate limiting, CORS protection, session isolation, and authentication middleware
 
 ## Architecture
 
@@ -40,15 +41,28 @@ cd browserthing
 npm install
 ```
 
-3. Start the server:
+3. Set up authentication (optional):
+```bash
+# Set a custom passcode (default is 'letmein2024')
+export PASSCODE=your-super-secret-passcode
+
+# Set a custom session secret for security
+export SESSION_SECRET=your-session-secret-key
+```
+
+4. Start the server:
 ```bash
 npm start
 ```
 
-4. Open your browser and navigate to:
+5. Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
+
+6. Enter the passcode when prompted to access the browser proxy interface.
+
+**Default Passcode**: `letmein2024` (change this immediately for production use!)
 
 ## Usage
 
@@ -61,9 +75,11 @@ http://localhost:3000
 
 ### REST API
 
-- `POST /api/session/create` - Create a new browser session
-- `DELETE /api/session/:sessionId` - Destroy a browser session
-- `GET /proxy/:sessionId/*` - Proxy web requests through the session
+- `POST /api/auth` - Authenticate with passcode
+- `POST /api/logout` - Logout and destroy session
+- `POST /api/session/create` - Create a new browser session (requires authentication)
+- `DELETE /api/session/:sessionId` - Destroy a browser session (requires authentication)
+- `GET /proxy/:sessionId/*` - Proxy web requests through the session (requires authentication)
 
 ### WebSocket Events
 
@@ -84,6 +100,8 @@ http://localhost:3000
 ### Environment Variables
 
 - `PORT` - Server port (default: 3000)
+- `PASSCODE` - Authentication passcode (default: 'letmein2024')
+- `SESSION_SECRET` - Session encryption secret (default: auto-generated)
 
 ### Browser Settings
 
@@ -95,11 +113,14 @@ The browser is configured with the following Puppeteer options:
 
 ## Security Features
 
+- **Passcode Authentication**: Secure access control with configurable passcode
+- **Session Management**: Encrypted sessions with configurable expiration
 - **Rate Limiting**: 100 requests per 15 minutes per IP
 - **CORS Protection**: Configurable cross-origin policies
 - **Session Isolation**: Each session runs in a separate browser context
 - **Content Security**: Helmet.js for security headers
 - **Request Filtering**: Proxy filters and modifies responses
+- **WebSocket Authentication**: Socket connections require valid session
 
 ## Development
 
@@ -155,6 +176,16 @@ npm test
 ## License
 
 MIT License - see LICENSE file for details
+
+## Security Recommendations
+
+For production deployment:
+
+1. **Change the default passcode**: Set a strong, unique passcode via the `PASSCODE` environment variable
+2. **Use HTTPS**: Deploy behind a reverse proxy with SSL/TLS encryption
+3. **Set session secret**: Use a cryptographically secure session secret
+4. **Network security**: Restrict access using firewalls or VPN
+5. **Regular updates**: Keep dependencies updated for security patches
 
 ## Disclaimer
 

@@ -28,10 +28,19 @@ body {
     margin-bottom: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .header-content {
     text-align: center;
+    flex: 1;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
 }
 
 .logo {
@@ -140,6 +149,17 @@ body {
 
 .btn-danger:hover:not(:disabled) {
     background: #dc2626;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #4f46e5;
+    border: 2px solid #4f46e5;
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: #4f46e5;
+    color: white;
 }
 
 .session-controls {
